@@ -18,4 +18,11 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
   Optional<Task> findByUserIdAndTaskName(@Param("userId") Integer userId, @Param("taskname") String taskname);
 
   List<Task> findByUser(User user);
+
+  Optional<Task> findByProjectOrganisationIdAndProjectIdAndId(int organisationId, int projectId, int taskId);
+
+  List<Task> findByProjectOrganisationIdAndProjectIdAndIdIn(int orgId, int projectId, List<Integer> taskIds);
+
+  List<Task> findByProjectOrganisationIdAndProjectId(int orgId, int projectId);
+
 }

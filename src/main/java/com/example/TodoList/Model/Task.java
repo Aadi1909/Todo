@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -22,7 +23,7 @@ public class Task {
     private Integer id;
 
     @NotBlank
-    @Column(nullable = false, unique =  true)
+    @Column(nullable = false, unique = true)
     private String taskName;
 
     @NotBlank
@@ -37,11 +38,24 @@ public class Task {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private Projects project;
+
+    @ManyToMany
+    @JoinTable(
+            name = "task_users",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> assignedUsers;
 
     @Builder.Default
     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE", nullable = false)
     private Boolean isCompleted = false;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

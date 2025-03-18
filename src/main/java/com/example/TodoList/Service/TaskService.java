@@ -41,7 +41,7 @@ public class TaskService {
             return "Task not found";
         }
     }
-    public List<Task> findAll() {
+    public List<Task> findAll(int projectId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return taskRepo.findAll();
